@@ -21,28 +21,49 @@ private:
 	std::queue<PacketPtr> m_queue;
 
 public:
-	// 세션 큐에 넣음
 	void AddPacket(PacketPtr spPacket)
 	{
 		m_queue.push(spPacket);
 	}
 
 	// 모든 패킷을 호출
-	void ProcessAllPacket()
+	// 인터페이스만 제공
+	// 외부(세션)에서 처리
+	template <typename FUNCTOR>
+	void ProcessAllPacket(FUNCTOR callback)
 	{
 		while (!m_queue.empty())
 		{
 			PacketPtr spPacket = m_queue.front();
 			m_queue.pop();
-			OnPacket(spPacket);
+			callback(spPacket);
 		}
 	}
+};
 
-	// 만약 패킷이 상속 받는다면 가상함수로 만들어야함
-	void OnPacket(PacketPtr spPacket)
+class CSession
+{
+public:
+	// 세션 큐에 넣음
+	void AddPacket(PacketPtr spPacket)
+	{
+		m_cQueue.AddPacket(spPacket);
+	}
+
+	void Update()
+	{
+		// 현재 객체의
+		// OnPacket 호출
+		m_cQueue.ProcessAllPacket(boost::bind(&CSession::OnPacket, this, _1));
+	}
+
+	virtual void OnPacket(PacketPtr spPacket)
 	{
 		std::cout << __FUNCTION__ << '\n';
 	}
+
+private:
+	CQueue m_cQueue;
 };
 
 int main()
@@ -50,11 +71,11 @@ int main()
 	PacketPtr spPacket;
 	spPacket.reset(new Packet());
 
-	CQueue queue;
-	queue.AddPacket(spPacket);
-	queue.AddPacket(spPacket);
-	// ..
-	queue.ProcessAllPacket();
+	CSession session;
+	session.AddPacket(spPacket);
+	session.AddPacket(spPacket);
+	//..
+	session.Update();
 
 	return 0;
 }
