@@ -162,14 +162,6 @@
       <AdditionalLibraryDirectories>C:\boost\boost_1_72_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="CriticalSection.h" />
-    <ClCompile Include="packet_queue_design.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CGen.h" />
-    <ClInclude Include="CPool.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
