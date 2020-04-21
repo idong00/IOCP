@@ -26,9 +26,9 @@
 // 타이머
 // 이벤트
 
-#include <iostream>
 #include <Windows.h>
-#include <conio.h>
+#include <boost/assert.hpp>
+#include "CGen.h"
 
 struct CCriticalSection
 	: public CRITICAL_SECTION
@@ -41,11 +41,15 @@ struct CCriticalSection
 class CCriticalSectionLock
 {
 public:
+	/* constructor */
 	CCriticalSectionLock(CRITICAL_SECTION& cs) :
 		m_pcs(&cs)
 	{
+		BOOST_ASSERT(m_pcs != nullptr);
 		EnterCriticalSection(m_pcs);
 	}
+
+	/* destructor */
 	~CCriticalSectionLock()
 	{
 		if (m_pcs != nullptr)
@@ -57,59 +61,59 @@ protected:
 	CRITICAL_SECTION* m_pcs;
 };
 
-#define CSLOCK(cs_) if(CCriticalSectionLock lock = cs_)
+#define CSLOCK(cs_) if(CCriticalSectionLock CONCATENATE( lock_, __LINE__ ) = cs_)
 
-int g_value = 0;
-CCriticalSection g_csValue;
-
-DWORD WINAPI TreadProc(LPVOID);
-
-int main()
-{
-	HANDLE hThread;
-	DWORD dwTreadID;
-
-	hThread = CreateThread(
-		NULL,
-		0,
-		(LPTHREAD_START_ROUTINE)TreadProc,
-		NULL,
-		0,
-		&dwTreadID);
-
-	while (TRUE)
-	{
-		for (int i = 0; i < 1000000; ++i)
-		{
-			CSLOCK(g_csValue)
-			{
-				// 보호
-				g_value -= 1;	// 임계영역
-			}
-		}
-		break;
-	}
-
-	_getch();
-
-	std::cout << g_value << std::endl;
-
-	return 0;
-}
-
-DWORD WINAPI TreadProc(LPVOID)
-{
-	while (TRUE)
-	{
-		for (int i = 0; i < 1000000; ++i)
-		{
-			CSLOCK(g_csValue)
-			{
-				// 보호
-				g_value += 1;	// 임계영역
-			}
-		}
-		break;
-	}
-	return 0;
-}
+//int g_value = 0;
+//CCriticalSection g_csValue;
+//
+//DWORD WINAPI TreadProc(LPVOID);
+//
+//int main()
+//{
+//	HANDLE hThread;
+//	DWORD dwTreadID;
+//
+//	hThread = CreateThread(
+//		NULL,
+//		0,
+//		(LPTHREAD_START_ROUTINE)TreadProc,
+//		NULL,
+//		0,
+//		&dwTreadID);
+//
+//	while (TRUE)
+//	{
+//		for (int i = 0; i < 1000000; ++i)
+//		{
+//			CSLOCK(g_csValue)
+//			{
+//				// 보호
+//				g_value -= 1;	// 임계영역
+//			}
+//		}
+//		break;
+//	}
+//
+//	_getch();
+//
+//	std::cout << g_value << std::endl;
+//
+//	return 0;
+//}
+//
+//DWORD WINAPI TreadProc(LPVOID)
+//{
+//	while (TRUE)
+//	{
+//		for (int i = 0; i < 1000000; ++i)
+//		{
+//			CSLOCK(g_csValue)
+//			{
+//				// 보호
+//				g_value += 1;	// 임계영역
+//			}
+//		}
+//		break;
+//	}
+//	return 0;
+//}

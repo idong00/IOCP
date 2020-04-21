@@ -6,23 +6,26 @@
 #include <boost/shared_ptr.hpp>
 #include <algorithm>
 #include <queue>
+#include "CriticalSection.h"
+
 
 struct Packet;
 typedef boost::shared_ptr<Packet> PacketPtr;
-struct Packet
+struct Packet // object pool
 {
-
+	// need to apply serialization
 };
 
-// 잘못된 설계
 class CQueue
 {
 private:
-	std::queue<PacketPtr> m_queue;
+	std::queue<PacketPtr>	m_queue;
+	CCriticalSection		m_csQueue;
 
 public:
 	void AddPacket(PacketPtr spPacket)
 	{
+		CCriticalSectionLock lock(m_csQueue);
 		m_queue.push(spPacket);
 	}
 
@@ -34,8 +37,17 @@ public:
 	{
 		while (!m_queue.empty())
 		{
-			PacketPtr spPacket = m_queue.front();
-			m_queue.pop();
+			PacketPtr spPacket;
+			CSLOCK(m_csQueue)
+			{
+				// 여기가 임계영역
+				// while 위에서 선언하면 콜백 처리하는 동안
+				// 다른 스레드가 계속 대기
+				spPacket = m_queue.front();
+				m_queue.pop();
+			}
+
+			// 스마트포인터로 이미 스레드 세이프
 			callback(spPacket);
 		}
 	}
@@ -44,7 +56,6 @@ public:
 class CSession
 {
 public:
-	// 세션 큐에 넣음
 	void AddPacket(PacketPtr spPacket)
 	{
 		m_cQueue.AddPacket(spPacket);
