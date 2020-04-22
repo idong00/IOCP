@@ -72,6 +72,7 @@ void main(int argc, char **argv)
    printf("We are trying to connect to %s:%d...\n",
           inet_ntoa(ServerAddr.sin_addr), htons(ServerAddr.sin_port));
 
+   // 서버에 접속시도
    if (connect(s, (SOCKADDR *) &ServerAddr, sizeof(ServerAddr)) 
        == SOCKET_ERROR)
    {
@@ -88,6 +89,7 @@ void main(int argc, char **argv)
 
    printf("We will now try to send a hello message.\n");
 
+   // 블럭
    if ((Ret = send(s, "Hello", 5, 0)) == SOCKET_ERROR)
    {
       printf("send failed with error %d\n", WSAGetLastError());

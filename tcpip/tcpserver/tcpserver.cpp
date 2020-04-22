@@ -67,7 +67,7 @@ void main(void)
 
    ServerAddr.sin_family = AF_INET;
    ServerAddr.sin_port = htons(Port);    
-   ServerAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+   ServerAddr.sin_addr.s_addr = htonl(INADDR_ANY);//
 
    // Associate the address information with the socket using bind.
 
@@ -85,6 +85,8 @@ void main(void)
    // normal for many applications.
 
    // 3
+   // 소켓이 접속을 받을 수 있는 상태
+   // 클라이언트에서 접속 시도
    if (listen(ListeningSocket, SOMAXCONN) == SOCKET_ERROR)
    {
       printf("listen failed with error %d\n", WSAGetLastError());
@@ -98,6 +100,10 @@ void main(void)
    // Accept a new connection when one arrives.
 
    // 4
+   // 블럭 상태리턴
+   // 스레드 사용해야함
+   // 접속이 올때까지 계속 기다림
+   // 소켓이 하나 만들어짐(유저마다 하나씩)
    if ((NewConnection = accept(ListeningSocket, (SOCKADDR *) &ClientAddr,
                                &ClientAddrLen)) == INVALID_SOCKET)
    {
@@ -126,6 +132,9 @@ void main(void)
 
    printf("We are waiting to receive data...\n");
 
+   // 데이터 받음
+   // 블럭 상태 리턴
+   // IOCP 사용하야함
    if ((Ret = recv(NewConnection, DataBuffer, sizeof(DataBuffer), 0)) 
        == SOCKET_ERROR)
    {
