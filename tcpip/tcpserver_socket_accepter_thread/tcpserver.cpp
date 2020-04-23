@@ -37,14 +37,13 @@ KUserPtr CreateUser()
 
 void main(void)
 {
-    KSocketAccepterThread
-                        socketAccepter;
-   WSADATA              wsaData;
-   int                  Ret;
+   KSocketAccepterThread	socketAccepter; // create bind listen accept 처리
+   WSADATA					wsaData;
+   int						Ret;
 
    // Initialize Winsock version 2.2
 
-   if ((Ret = WSAStartup(MAKEWORD(2,2), &wsaData)) != 0)
+   if ((Ret = WSAStartup(MAKEWORD(2,2), &wsaData)) != 0)  // 스타트
    {
       // NOTE: Since Winsock failed to load we cannot use WSAGetLastError 
       // to determine the error code as is normally done when a Winsock 
@@ -54,7 +53,7 @@ void main(void)
       return;
    }
 
-   socketAccepter.BindAndListen( 5150, CreateUser );
+   socketAccepter.BindAndListen( 5150, CreateUser );  // 리스닝 모드
    socketAccepter.BeginThread();
 
    printf( "Press any key to exit...\r\n" );

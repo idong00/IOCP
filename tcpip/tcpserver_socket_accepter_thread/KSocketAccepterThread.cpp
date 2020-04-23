@@ -63,14 +63,14 @@ VIRTUAL void KSocketAccepterThread::ThreadRun()
     BEGIN_LOG( cout, L"Enter" )
         << END_LOG;
 
-    DWORD dwPrevTime = ::GetTickCount();
+    DWORD dwPrevTime = ::GetTickCount();  // 이전시간 받음
 
     while( true ) {
         const DWORD dwCurrTime = ::GetTickCount();
         const DWORD dwElapsedTime = dwCurrTime - dwPrevTime;
         dwPrevTime = dwCurrTime;
 
-        const DWORD ret = ::WaitForSingleObject( m_hQuitEvent, 0 );
+        const DWORD ret = ::WaitForSingleObject( m_hQuitEvent, 0 ); // 없으면 리턴 / 블락상태 없음
         if( ret == WAIT_OBJECT_0 )
             break;
         else if( ret == WAIT_TIMEOUT )
@@ -103,7 +103,7 @@ VIRTUAL void KSocketAccepterThread::ThreadUpdateLoop( DWORD dwElapsedTime_ )
     int size = sizeof(sinRemote);
 
     // create new accept socket for new user connection.
-    socket = ::accept( m_sock, (SOCKADDR*)&sinRemote, &size );
+    socket = ::accept( m_sock, (SOCKADDR*)&sinRemote, &size ); // 블락 생태이지만, 스레드 안이므로 상관없음
 
     if( socket == INVALID_SOCKET ) {
         BEGIN_LOG( cerr, L"INVALID_SOCKET. WSAError : " )
@@ -126,11 +126,13 @@ VIRTUAL void KSocketAccepterThread::ThreadUpdateLoop( DWORD dwElapsedTime_ )
         return;
     }
     else {
-        pkSockObj->SetSocketInfo( socket, sinRemote );
+        pkSockObj->SetSocketInfo( socket, sinRemote );  // 유저소켓 얻음 ip 정보
 
         //// bind socket to Iocp
 
         // start receiving
+		// 데이터 받음
+		// 보낸게 없으면 블락 상태로 기다림 (문제o)
         const bool isReceiveData = pkSockObj->ReceiveData();
         if( isReceiveData == true ) {
         }
