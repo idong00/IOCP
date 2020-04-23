@@ -12,7 +12,21 @@
 // 일반적으로 디폴트
 // 프로그래밍 단계에서 설정
 
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+
+/* 중요 */
+/* 직렬화 ( serialization ) */
+// CData를 전송하기 위해 버퍼에 채워야함
+// 일렬로 세워 버퍼에 채워야함
+// 부스트 사용
+
 #include <iostream>
+#include <sstream>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 // 지금부터 선언하는 모든 구조체를 alignment 시킴(컴파일러에게)
 // 1 바이트 단위
@@ -22,15 +36,36 @@ struct CData
 {
 	char m_char;
 	float m_data;
+
+	template<typename Archive>
+	void serialize(Archive& ar, const unsigned int version)
+	{
+		ar & m_char;   // 데이터를 Archive에 줌
+		ar & m_data;
+	}
 };
 
-// 끝
 #pragma pack(pop)
 
 int main()
 {
-	int size = sizeof(CData);
-	std::cout << size;
+	// CData를 stringstream 버퍼에 채울예정
+	CData d;
+	d.m_char = 1;
+	d.m_data = 2.3f;
+
+	std::stringstream ss;
+
+	boost::archive::text_oarchive oa{ ss };	// archive에 버퍼를 연결
+	oa << d;	// archive를 이용해 버퍼에 채움
+
+	// ss 버퍼를 보냈다고 가정
+
+	CData d2;
+
+	// 서버측이라 가정
+	boost::archive::text_iarchive ia{ ss };
+	ia >> d2 ;	// deserialization
 
 	return 0;
 }
