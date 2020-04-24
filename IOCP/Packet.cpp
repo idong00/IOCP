@@ -7,6 +7,7 @@
 #include <boost/shared_ptr.hpp>
 #include <iostream>
 #include <sstream>
+#include "EnumToString.h"
 
 
 enum EPacketType
@@ -30,10 +31,18 @@ struct CPacketVerifyAccount
 
 struct CPacketLogin
 {
+	// 결과 상태
+	DECLARE_ENUM( EResult,
+		SUCCESS,
+		ERROR_INVALID_PASSWORD,
+		ERROR_DUPLICATE_CONNECTION
+	);
+
 	std::string m_login;
 	std::string m_password;
 	int m_id;
 	int m_age;
+	int m_result;	// 결과값
 
 	template<typename Archive>
 	void serialize(Archive& ar, const unsigned int version)
@@ -42,6 +51,7 @@ struct CPacketLogin
 		ar & m_password;
 		ar & m_id;
 		ar & m_age;
+		ar & m_result;
 	}
 };
 
@@ -151,12 +161,12 @@ int main()
 {
 	CPacket     packets[2];		// 패킷 2개
 
-	CPacketVerifyAccount    verifyAccount;
-	{
-		verifyAccount.m_login = "KDH";
-		verifyAccount.m_id = 48;
-		packets[0].SetData(0, ECLGS_VERIFY_ACCOUNT_REQ, verifyAccount);
-	}
+	//CPacketVerifyAccount    verifyAccount;
+	//{
+	//	verifyAccount.m_login = "KDH";
+	//	verifyAccount.m_id = 48;
+	//	packets[0].SetData(0, ECLGS_VERIFY_ACCOUNT_REQ, verifyAccount);
+	//}
 
 
 	CPacketLogin        login;
@@ -165,6 +175,7 @@ int main()
 		login.m_password = "hello world";
 		login.m_id = 99;
 		login.m_age = 48;
+		login.m_result = CPacketLogin::ERROR_INVALID_PASSWORD;
 		packets[1].SetData(0, ECLGS_LOGIN, login);
 	}
 
@@ -181,15 +192,16 @@ int main()
 	CPacket     packetNew;
 	BufferToPacket(ss, packetNew);
 
-	if (packetNew.m_usPacketId == ECLGS_VERIFY_ACCOUNT_REQ)
+	/*if (packetNew.m_usPacketId == ECLGS_VERIFY_ACCOUNT_REQ)
 	{
 		CPacketVerifyAccount    verifyNew;
 		BufferToPacket(packetNew.m_buffer, verifyNew);
-	}
-	else if (packetNew.m_usPacketId == ECLGS_LOGIN)
+	}*/
+	if (packetNew.m_usPacketId == ECLGS_LOGIN)
 	{
 		CPacketLogin    loginNew;
 		BufferToPacket(packetNew.m_buffer, loginNew);
+		std::cout << CPacketLogin::EResultToString(loginNew.m_result) << '\n';	// 로그
 	}//if.. else if..
 
 	return 0;

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EnumToString.h" />
     <ClCompile Include="Packet.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
