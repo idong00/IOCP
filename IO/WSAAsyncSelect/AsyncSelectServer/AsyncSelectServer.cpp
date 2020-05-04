@@ -1,3 +1,6 @@
+
+// 윈도우 메세지로 알려줌
+
 // Description:
 //
 //    This sample illustrates how to develop a simple echo server Winsock
@@ -349,6 +352,8 @@ HWND MakeWorkerWindow(void)
     }
     else
         printf("CreateWindow() is OK!\n");
+
+	ShowWindow(Window, SW_SHOW);
 
     return Window;
 }
