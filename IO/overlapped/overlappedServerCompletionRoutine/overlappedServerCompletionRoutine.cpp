@@ -29,6 +29,8 @@ typedef struct _SOCKET_INFORMATION {
     DWORD BytesRECV;
 } SOCKET_INFORMATION, *LPSOCKET_INFORMATION;
 
+//
+// accept를 호출하는 루틴
 void CALLBACK WorkerRoutine(DWORD Error, DWORD BytesTransferred, LPWSAOVERLAPPED Overlapped, DWORD InFlags);
 DWORD WINAPI WorkerThread(LPVOID lpParameter);
 
@@ -102,6 +104,7 @@ int main(int argc, char **argv)
     {
         AcceptSocket = accept(ListenSocket, NULL, NULL);
 
+		// WorkerThread를 non signal 상태로 만듬
         if (WSASetEvent(AcceptEvent) == FALSE)
         {
             printf("WSASetEvent() failed with error %d\n", WSAGetLastError());
@@ -128,6 +131,10 @@ DWORD WINAPI WorkerThread(LPVOID lpParameter)
         // Wait for accept() to signal an event and also process WorkerRoutine() returns
         while (TRUE)
         {
+			//
+			// 마지막 파라이터가 다름
+			// AcceptEvent로 깨어날 수도 있고,
+			// 루틴(IO)이 완료되었을 때도 깨어날 수 있음
             Index = WSAWaitForMultipleEvents(1, EventArray, FALSE, WSA_INFINITE, TRUE);
             if (Index == WSA_WAIT_FAILED)
             {
@@ -137,6 +144,8 @@ DWORD WINAPI WorkerThread(LPVOID lpParameter)
             else
                 printf("WSAWaitForMultipleEvents() should be OK!\n");
 
+			// 만약 WAIT_IO_COMPLETION이면 IO가 완료된 것
+			// 계속 기다려야함
             if (Index != WAIT_IO_COMPLETION)
             {
                 // An accept() call event is ready - break the wait loop
@@ -144,6 +153,8 @@ DWORD WINAPI WorkerThread(LPVOID lpParameter)
             }
         }
 
+		//
+		// 리셋해서 시그널 가능한 상태로 만듬
         WSAResetEvent(EventArray[Index - WSA_WAIT_EVENT_0]);
         // Create a socket information structure to associate with the accepted socket
         if ((SocketInfo = (LPSOCKET_INFORMATION)GlobalAlloc(GPTR, sizeof(SOCKET_INFORMATION))) == NULL)
@@ -163,6 +174,9 @@ DWORD WINAPI WorkerThread(LPVOID lpParameter)
         SocketInfo->DataBuf.buf = SocketInfo->Buffer;
 
         Flags = 0;
+		//
+		// 리시브
+		// IO 완료시 WorkerRoutine 호출
         if (WSARecv(SocketInfo->Socket, &(SocketInfo->DataBuf), 1, &RecvBytes, &Flags,
             &(SocketInfo->Overlapped), WorkerRoutine) == SOCKET_ERROR)
         {
