@@ -103,6 +103,7 @@ VIRTUAL void KSocketAccepterThread::ThreadUpdateLoop( DWORD dwElapsedTime_ )
     SOCKADDR_IN sinRemote;
     int size = sizeof(sinRemote);
 
+	//
     // create new accept socket for new user connection.
     socket = ::accept( m_sock, (SOCKADDR*)&sinRemote, &size );
 

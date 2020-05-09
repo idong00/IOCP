@@ -3,13 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "selectclient", "IO\select\selectclient\selectclient.vcxproj", "{A8EF3B75-7E85-46BB-BC26-D49264028EDC}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "overlappedServer", "IO\overlapped\overlappedServer\overlappedServer.vcxproj", "{E9A22867-3C8D-4A33-91A1-4437850AB540}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "overlappedServerCompletionRoutine", "IO\overlapped\overlappedServerCompletionRoutine\overlappedServerCompletionRoutine.vcxproj", "{9B3DFAEF-2599-4EE4-B863-10997B28E198}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iocpServer", "IO\iocp\iocpServer\iocpServer.vcxproj", "{CBFA6A05-ACE7-4A0C-894D-6E22C3912088}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tcpserver_socket_accepter_thread Iocp", "tcpip\tcpserver_socket_accepter_thread Iocp\tcpserver_socket_accepter_thread Iocp.vcxproj", "{3AE86784-640D-4C04-BE9F-8336B6E32A4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,30 +13,12 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A8EF3B75-7E85-46BB-BC26-D49264028EDC}.Debug|x64.ActiveCfg = Debug|Win32
-		{A8EF3B75-7E85-46BB-BC26-D49264028EDC}.Debug|x86.ActiveCfg = Debug|Win32
-		{A8EF3B75-7E85-46BB-BC26-D49264028EDC}.Debug|x86.Build.0 = Debug|Win32
-		{A8EF3B75-7E85-46BB-BC26-D49264028EDC}.Release|x64.ActiveCfg = Release|Win32
-		{A8EF3B75-7E85-46BB-BC26-D49264028EDC}.Release|x86.ActiveCfg = Release|Win32
-		{A8EF3B75-7E85-46BB-BC26-D49264028EDC}.Release|x86.Build.0 = Release|Win32
-		{E9A22867-3C8D-4A33-91A1-4437850AB540}.Debug|x64.ActiveCfg = Debug|Win32
-		{E9A22867-3C8D-4A33-91A1-4437850AB540}.Debug|x86.ActiveCfg = Debug|Win32
-		{E9A22867-3C8D-4A33-91A1-4437850AB540}.Debug|x86.Build.0 = Debug|Win32
-		{E9A22867-3C8D-4A33-91A1-4437850AB540}.Release|x64.ActiveCfg = Release|Win32
-		{E9A22867-3C8D-4A33-91A1-4437850AB540}.Release|x86.ActiveCfg = Release|Win32
-		{E9A22867-3C8D-4A33-91A1-4437850AB540}.Release|x86.Build.0 = Release|Win32
-		{9B3DFAEF-2599-4EE4-B863-10997B28E198}.Debug|x64.ActiveCfg = Debug|Win32
-		{9B3DFAEF-2599-4EE4-B863-10997B28E198}.Debug|x86.ActiveCfg = Debug|Win32
-		{9B3DFAEF-2599-4EE4-B863-10997B28E198}.Debug|x86.Build.0 = Debug|Win32
-		{9B3DFAEF-2599-4EE4-B863-10997B28E198}.Release|x64.ActiveCfg = Release|Win32
-		{9B3DFAEF-2599-4EE4-B863-10997B28E198}.Release|x86.ActiveCfg = Release|Win32
-		{9B3DFAEF-2599-4EE4-B863-10997B28E198}.Release|x86.Build.0 = Release|Win32
-		{CBFA6A05-ACE7-4A0C-894D-6E22C3912088}.Debug|x64.ActiveCfg = Debug|Win32
-		{CBFA6A05-ACE7-4A0C-894D-6E22C3912088}.Debug|x86.ActiveCfg = Debug|Win32
-		{CBFA6A05-ACE7-4A0C-894D-6E22C3912088}.Debug|x86.Build.0 = Debug|Win32
-		{CBFA6A05-ACE7-4A0C-894D-6E22C3912088}.Release|x64.ActiveCfg = Release|Win32
-		{CBFA6A05-ACE7-4A0C-894D-6E22C3912088}.Release|x86.ActiveCfg = Release|Win32
-		{CBFA6A05-ACE7-4A0C-894D-6E22C3912088}.Release|x86.Build.0 = Release|Win32
+		{3AE86784-640D-4C04-BE9F-8336B6E32A4D}.Debug|x64.ActiveCfg = Debug|Win32
+		{3AE86784-640D-4C04-BE9F-8336B6E32A4D}.Debug|x86.ActiveCfg = Debug|Win32
+		{3AE86784-640D-4C04-BE9F-8336B6E32A4D}.Debug|x86.Build.0 = Debug|Win32
+		{3AE86784-640D-4C04-BE9F-8336B6E32A4D}.Release|x64.ActiveCfg = Release|Win32
+		{3AE86784-640D-4C04-BE9F-8336B6E32A4D}.Release|x86.ActiveCfg = Release|Win32
+		{3AE86784-640D-4C04-BE9F-8336B6E32A4D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

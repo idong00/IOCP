@@ -95,6 +95,7 @@ DWORD KIocp::GenNewCompletionKey() const
     return 0L;
 }
 
+// IOCP 스레드를 종료시킴
 bool KIocp::PostCompletionStatus( ULONG_PTR pCompletionKey_
     , DWORD dwNumBytes
     , IN OVERLAPPED* pOverlapped_ )
@@ -158,6 +159,8 @@ void KIocp::OnIoCompleted( DWORD dwKey_, DWORD dwBytesTransferred_, IN OVERLAPPE
         return;
     }
 
+	//
+	// recv인지 send인지 판단
     switch( pkOverlapped->m_eIoMode ) {
     case KOverlapped::IO_RECEIVE:
         if( &pkSocket->m_ovlReceive != pkOverlapped ) {

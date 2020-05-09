@@ -46,6 +46,7 @@ VIRTUAL void KIocpWorkerThread::ThreadUpdateLoop( DWORD dwElapsedTime_ )
     DWORD dwBytesTransfer = 0;
     DWORD dwKey = 0;
 
+	//
     const bool bOK = _KIocp.GetCompletionStatus( OUT &dwKey, OUT &dwBytesTransfer, OUT &povl );
 
     if( KIocp::QUIT_IOCP_WORKER_THREAD == dwKey && povl == NULL ) {
@@ -55,6 +56,7 @@ VIRTUAL void KIocpWorkerThread::ThreadUpdateLoop( DWORD dwElapsedTime_ )
         return;
     } // if
 
+	//
     if( bOK == true ) {
         _KIocp.OnIoCompleted( dwKey, dwBytesTransfer, povl );
     }
